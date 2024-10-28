@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
   title: FeatureService API
   description: FeatureService API Swagger Documentation
@@ -12,8 +12,7 @@ info:
 servers:
   - url: http://localhost:8081
     description: FeatureService Server URL
-security:
-  - Authorization: []
+
 tags:
   - name: Products API
     description: API endpoints to manage products
