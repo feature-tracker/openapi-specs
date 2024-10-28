@@ -1,0 +1,530 @@
+openapi: 3.0.1
+info:
+  title: FeatureService API
+  description: FeatureService API Swagger Documentation
+  contact:
+    name: SivaLabs
+    email: support@sivalabs.in
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: v1.0.0
+servers:
+  - url: http://localhost:8081
+    description: FeatureService Server URL
+security:
+  - Authorization: []
+tags:
+  - name: Products API
+    description: API endpoints to manage products
+  - name: Releases API
+    description: API endpoints to manage releases
+  - name: Features API
+    description: API endpoints to manage features
+paths:
+  /api/products:
+    get:
+      tags:
+        - Products API
+      summary: Find all products
+      description: Find all products
+      operationId: getProducts
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductDto"
+    post:
+      tags:
+        - Products API
+      summary: Create a new product
+      description: Create a new product
+      operationId: createProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProductPayload"
+        required: true
+      responses:
+        "201":
+          description: Successful response
+          headers:
+            Location:
+              description: URI of the created product
+              required: true
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+  /api/products/{code}:
+    get:
+      tags:
+        - Products API
+      summary: Find product by code
+      description: Find product by code
+      operationId: getProduct
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDto"
+        "404":
+          description: Product not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDto"
+    put:
+      tags:
+        - Products API
+      summary: Update an existing product
+      description: Update an existing product
+      operationId: updateProduct
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProductPayload"
+        required: true
+      responses:
+        "200":
+          description: Successful response
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/releases:
+    get:
+      tags:
+        - Releases API
+      summary: Find releases by product code
+      description: Find releases by product code
+      operationId: getProductReleases
+      parameters:
+        - name: productCode
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReleaseDto"
+    post:
+      tags:
+        - Releases API
+      summary: Create a new release
+      description: Create a new release
+      operationId: createRelease
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateReleasePayload"
+        required: true
+      responses:
+        "201":
+          description: Successful response
+          headers:
+            Location:
+              description: URI of the created release
+              required: true
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/releases/{code}:
+    get:
+      tags:
+        - Releases API
+      summary: Find release by code
+      description: Find release by code
+      operationId: getRelease
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReleaseDto"
+        "404":
+          description: Release not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ReleaseDto"
+    put:
+      tags:
+        - Releases API
+      summary: Update an existing release
+      description: Update an existing release
+      operationId: updateRelease
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateReleasePayload"
+        required: true
+      responses:
+        "200":
+          description: Successful response
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      tags:
+        - Releases API
+      summary: Delete an existing release
+      description: Delete an existing release
+      operationId: deleteRelease
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/features:
+    get:
+      tags:
+        - Features API
+      summary: Find features by product release
+      description: Find features by product release
+      operationId: getFeatures
+      parameters:
+        - name: releaseCode
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FeatureDto"
+    post:
+      tags:
+        - Features API
+      summary: Create a new feature
+      description: Create a new feature
+      operationId: createFeature
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateFeaturePayload"
+        required: true
+      responses:
+        "201":
+          description: Successful response
+          headers:
+            Location:
+              description: URI of the created feature
+              required: true
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/features/{code}:
+    get:
+      tags:
+        - Features API
+      summary: Find feature by code
+      description: Find feature by code
+      operationId: getFeature
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeatureDto"
+        "404":
+          description: Feature not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FeatureDto"
+    put:
+      tags:
+        - Features API
+      summary: Update an existing feature
+      description: Update an existing feature
+      operationId: updateFeature
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateFeaturePayload"
+        required: true
+      responses:
+        "200":
+          description: Successful response
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      tags:
+        - Features API
+      summary: Delete an existing feature
+      description: Delete an existing feature
+      operationId: deleteFeature
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+components:
+  schemas:
+    UpdateReleasePayload:
+      type: object
+      properties:
+        description:
+          type: string
+        status:
+          type: string
+    UpdateProductPayload:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        description:
+          type: string
+    UpdateFeaturePayload:
+      required:
+        - title
+      type: object
+      properties:
+        title:
+          maxLength: 500
+          minLength: 0
+          type: string
+        description:
+          type: string
+        assignedTo:
+          type: string
+        status:
+          type: string
+    CreateReleasePayload:
+      required:
+        - code
+        - productCode
+      type: object
+      properties:
+        productCode:
+          type: string
+        code:
+          maxLength: 50
+          minLength: 0
+          type: string
+        description:
+          type: string
+    CreateProductPayload:
+      required:
+        - code
+        - name
+      type: object
+      properties:
+        code:
+          maxLength: 50
+          minLength: 0
+          type: string
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+        description:
+          type: string
+    CreateFeaturePayload:
+      required:
+        - code
+        - releaseCode
+        - title
+      type: object
+      properties:
+        releaseCode:
+          type: string
+        code:
+          maxLength: 50
+          minLength: 0
+          type: string
+        title:
+          maxLength: 500
+          minLength: 0
+          type: string
+        description:
+          type: string
+        assignedTo:
+          type: string
+    ReleaseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        code:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+    ProductDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        disabled:
+          type: boolean
+        createdBy:
+          type: string
+    FeatureDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        code:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        assignedTo:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+  securitySchemes:
+    Bearer:
+      type: http
+      name: Authorization
+      scheme: Bearer
+      bearerFormat: JWT
