@@ -380,6 +380,12 @@ components:
           type: string
         status:
           type: string
+          enum:
+            - DRAFT
+            - RELEASED
+        releasedAt:
+          type: string
+          format: date-time
     UpdateProductPayload:
       required:
         - name
@@ -390,6 +396,8 @@ components:
           minLength: 0
           type: string
         description:
+          type: string
+        imageUrl:
           type: string
     UpdateFeaturePayload:
       required:
@@ -436,13 +444,18 @@ components:
           type: string
         description:
           type: string
+        imageUrl:
+          type: string
     CreateFeaturePayload:
       required:
         - code
+        - productCode
         - releaseCode
         - title
       type: object
       properties:
+        productCode:
+          type: string
         releaseCode:
           type: string
         code:
@@ -469,6 +482,12 @@ components:
           type: string
         status:
           type: string
+          enum:
+            - DRAFT
+            - RELEASED
+        releasedAt:
+          type: string
+          format: date-time
         createdBy:
           type: string
         createdAt:
@@ -490,6 +509,8 @@ components:
         name:
           type: string
         description:
+          type: string
+        imageUrl:
           type: string
         disabled:
           type: boolean
