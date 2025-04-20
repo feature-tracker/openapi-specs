@@ -249,13 +249,18 @@ paths:
     get:
       tags:
         - Features API
-      summary: Find features by product release
-      description: Find features by product release
+      summary: Find features by product or release
+      description: Find features by product or release
       operationId: getFeatures
       parameters:
+        - name: productCode
+          in: query
+          required: false
+          schema:
+            type: string
         - name: releaseCode
           in: query
-          required: true
+          required: false
           schema:
             type: string
       responses:
