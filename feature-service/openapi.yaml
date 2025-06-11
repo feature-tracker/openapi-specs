@@ -12,7 +12,8 @@ info:
 servers:
   - url: http://localhost:8081
     description: FeatureService Server URL
-
+security:
+  - Authorization: []
 tags:
   - name: Products API
     description: API endpoints to manage products
@@ -21,155 +22,6 @@ tags:
   - name: Features API
     description: API endpoints to manage features
 paths:
-  /api/products:
-    get:
-      tags:
-        - Products API
-      summary: Find all products
-      description: Find all products
-      operationId: getProducts
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ProductDto"
-    post:
-      tags:
-        - Products API
-      summary: Create a new product
-      description: Create a new product
-      operationId: createProduct
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateProductPayload"
-        required: true
-      responses:
-        "201":
-          description: Successful response
-          headers:
-            Location:
-              description: URI of the created product
-              required: true
-              style: simple
-              schema:
-                type: string
-        "400":
-          description: Invalid request
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-  /api/products/{code}:
-    get:
-      tags:
-        - Products API
-      summary: Find product by code
-      description: Find product by code
-      operationId: getProduct
-      parameters:
-        - name: code
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProductDto"
-        "404":
-          description: Product not found
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/ProductDto"
-    put:
-      tags:
-        - Products API
-      summary: Update an existing product
-      description: Update an existing product
-      operationId: updateProduct
-      parameters:
-        - name: code
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateProductPayload"
-        required: true
-      responses:
-        "200":
-          description: Successful response
-        "400":
-          description: Invalid request
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-  /api/releases:
-    get:
-      tags:
-        - Releases API
-      summary: Find releases by product code
-      description: Find releases by product code
-      operationId: getProductReleases
-      parameters:
-        - name: productCode
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ReleaseDto"
-    post:
-      tags:
-        - Releases API
-      summary: Create a new release
-      description: Create a new release
-      operationId: createRelease
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateReleasePayload"
-        required: true
-      responses:
-        "201":
-          description: Successful response
-          headers:
-            Location:
-              description: URI of the created release
-              required: true
-              style: simple
-              schema:
-                type: string
-        "400":
-          description: Invalid request
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
   /api/releases/{code}:
     get:
       tags:
@@ -244,23 +96,17 @@ paths:
           description: Unauthorized
         "403":
           description: Forbidden
-
-  /api/features:
+  /api/products/{code}:
     get:
       tags:
-        - Features API
-      summary: Find features by product or release
-      description: Find features by product or release
-      operationId: getFeatures
+        - Products API
+      summary: Find product by code
+      description: Find product by code
+      operationId: getProduct
       parameters:
-        - name: productCode
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: releaseCode
-          in: query
-          required: false
+        - name: code
+          in: path
+          required: true
           schema:
             type: string
       responses:
@@ -269,38 +115,40 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/FeatureDto"
-    post:
+                $ref: "#/components/schemas/ProductDto"
+        "404":
+          description: Product not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDto"
+    put:
       tags:
-        - Features API
-      summary: Create a new feature
-      description: Create a new feature
-      operationId: createFeature
+        - Products API
+      summary: Update an existing product
+      description: Update an existing product
+      operationId: updateProduct
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateFeaturePayload"
+              $ref: "#/components/schemas/UpdateProductPayload"
         required: true
       responses:
-        "201":
+        "200":
           description: Successful response
-          headers:
-            Location:
-              description: URI of the created feature
-              required: true
-              style: simple
-              schema:
-                type: string
         "400":
           description: Invalid request
         "401":
           description: Unauthorized
         "403":
           description: Forbidden
-
   /api/features/{code}:
     get:
       tags:
@@ -375,7 +223,155 @@ paths:
           description: Unauthorized
         "403":
           description: Forbidden
-
+  /api/releases:
+    get:
+      tags:
+        - Releases API
+      summary: Find releases by product code
+      description: Find releases by product code
+      operationId: getProductReleases
+      parameters:
+        - name: productCode
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReleaseDto"
+    post:
+      tags:
+        - Releases API
+      summary: Create a new release
+      description: Create a new release
+      operationId: createRelease
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateReleasePayload"
+        required: true
+      responses:
+        "201":
+          description: Successful response
+          headers:
+            Location:
+              description: URI of the created release
+              required: true
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+  /api/products:
+    get:
+      tags:
+        - Products API
+      summary: Find all products
+      description: Find all products
+      operationId: getProducts
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductDto"
+    post:
+      tags:
+        - Products API
+      summary: Create a new product
+      description: Create a new product
+      operationId: createProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProductPayload"
+        required: true
+      responses:
+        "201":
+          description: Successful response
+          headers:
+            Location:
+              description: URI of the created product
+              required: true
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+  /api/features:
+    get:
+      tags:
+        - Features API
+      summary: Find features by product or release
+      description: Find features by product or release
+      operationId: getFeatures
+      parameters:
+        - name: productCode
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: releaseCode
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FeatureDto"
+    post:
+      tags:
+        - Features API
+      summary: Create a new feature
+      description: Create a new feature
+      operationId: createFeature
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateFeaturePayload"
+        required: true
+      responses:
+        "201":
+          description: Successful response
+          headers:
+            Location:
+              description: URI of the created feature
+              required: true
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
 components:
   schemas:
     UpdateReleasePayload:
@@ -392,86 +388,84 @@ components:
           type: string
           format: date-time
     UpdateProductPayload:
-      required:
-        - name
       type: object
       properties:
+        prefix:
+          type: string
+          maxLength: 10
+          minLength: 0
         name:
+          type: string
           maxLength: 255
           minLength: 0
-          type: string
         description:
           type: string
         imageUrl:
           type: string
     UpdateFeaturePayload:
-      required:
-        - title
       type: object
       properties:
         title:
+          type: string
           maxLength: 500
           minLength: 0
-          type: string
         description:
+          type: string
+        releaseCode:
           type: string
         assignedTo:
           type: string
         status:
           type: string
+          enum:
+            - NEW
+            - IN_PROGRESS
+            - ON_HOLD
+            - RELEASED
     CreateReleasePayload:
-      required:
-        - code
-        - productCode
       type: object
       properties:
         productCode:
           type: string
+          minLength: 1
         code:
+          type: string
           maxLength: 50
           minLength: 0
-          type: string
         description:
           type: string
     CreateProductPayload:
-      required:
-        - code
-        - name
       type: object
       properties:
         code:
+          type: string
           maxLength: 50
           minLength: 0
+        prefix:
           type: string
+          maxLength: 10
+          minLength: 0
         name:
+          type: string
           maxLength: 255
           minLength: 0
-          type: string
         description:
           type: string
         imageUrl:
           type: string
     CreateFeaturePayload:
-      required:
-        - code
-        - productCode
-        - releaseCode
-        - title
       type: object
       properties:
         productCode:
           type: string
-        releaseCode:
-          type: string
-        code:
-          maxLength: 50
-          minLength: 0
-          type: string
+          minLength: 1
         title:
+          type: string
           maxLength: 500
           minLength: 0
-          type: string
         description:
+          type: string
+        releaseCode:
           type: string
         assignedTo:
           type: string
@@ -511,6 +505,8 @@ components:
           format: int64
         code:
           type: string
+        prefix:
+          type: string
         name:
           type: string
         description:
@@ -534,6 +530,13 @@ components:
         description:
           type: string
         status:
+          type: string
+          enum:
+            - NEW
+            - IN_PROGRESS
+            - ON_HOLD
+            - RELEASED
+        releaseCode:
           type: string
         assignedTo:
           type: string

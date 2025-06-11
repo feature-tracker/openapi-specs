@@ -1,0 +1,55 @@
+openapi: 3.1.0
+info:
+  title: UserService API
+  description: UserService API Swagger Documentation
+  contact:
+    name: SivaLabs
+    email: support@sivalabs.in
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: v1.0.0
+servers:
+- url: http://localhost:8084
+  description: UserService Server URL
+security:
+- Authorization: []
+tags:
+- name: User API
+  description: API endpoints to manage users
+paths:
+  /api/users:
+    get:
+      tags:
+      - Users API
+      summary: Find all users
+      description: Find all users
+      operationId: getUsers
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserDto"
+components:
+  schemas:
+    UserDto:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+        role:
+          type: string
+  securitySchemes:
+    Bearer:
+      type: http
+      name: Authorization
+      scheme: Bearer
+      bearerFormat: JWT
